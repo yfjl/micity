@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+//防止操作系统用户没有将node装在默认的/usr/bin路径里。当系统看到这一行的时候，首先会到env设置里查找node的安装路径，再调用对应路径下的解释器程序完成操作。
+
+const { resolve } = require('path')
+
+const res = command => resolve(__dirname, '../lib/', command)
+
+const program = require('commander')
+
+program
+  .version(require('../package').version )
+
+program
+  .usage('<command>')
+
+program
+  .command('add')  
+  .description('添加一个模板')
+  .alias('a')
+  .action(() => {
+    require(res('add'))
+  })
+
+program
+  .command('list')
+  .description('所有模板列表')
+  .alias('l')
+  .action(() => {
+    require(res('list'))
+  })
+
+program
+  .command('init')
+  .description('初始化一个新项目')
+  .alias('i')
+  .action(() => {
+    require(res('init'))
+  })
+
+program
+  .command('delete')
+  .description('删除一个模板')
+  .alias('d')
+  .action(() => {
+    require(res('delete'))
+  })
+
+
+program.parse(process.argv)
+
+if(!program.args.length){
+  program.help()
+}
